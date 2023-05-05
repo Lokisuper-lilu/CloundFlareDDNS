@@ -14,7 +14,7 @@ public class UserInfo {
     private boolean select = true; //选择对本机ddns还是对已经ddns的域名做ddns
     // (true为本机，false为已经ddns的域名)
     private String ObjectHost = ""; //已经ddns的域名
-
+    private boolean force=false;//是否强制更新
     public UserInfo() {
     }
 
@@ -88,6 +88,14 @@ public class UserInfo {
 
     public String getObjectHost() {
         return ObjectHost;
+    }
+
+    public boolean isForce() {
+        return force;
+    }
+
+    public void setForce(boolean force) {
+        this.force = force;
     }
 
     @Override

@@ -48,6 +48,7 @@ public class ReadPropertiesToUser {
             userInfo.setRecord_id(properties.getProperty("record_id"));
             userInfo.setType(properties.getProperty("type"));
             userInfo.setName(properties.getProperty("name"));
+            userInfo.setForce(properties.getProperty("force").equals("true"));
             if (properties.getProperty("ttl") != null) {
                 logger.debug("ttl不为空,设置ttl为" + properties.getProperty("ttl"));
                 userInfo.setTtl(Integer.parseInt(properties.getProperty("ttl")));
@@ -88,6 +89,7 @@ public class ReadPropertiesToUser {
             properties1.setProperty("type", "");
             properties1.setProperty("name", "");
             properties1.setProperty("ttl", "");
+            properties1.setProperty("force", "false");
             //写入配置文件
             try {
                 properties1.store(new FileOutputStream(file), "user.properties");

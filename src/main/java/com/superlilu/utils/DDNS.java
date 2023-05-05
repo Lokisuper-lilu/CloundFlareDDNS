@@ -14,38 +14,38 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DDNS {
-    static String ip;
-    private static final Logger DDNSlogger = Logger.getLogger(DDNS.class);
+    private static final Logger DDNSLogger = Logger.getLogger(DDNS.class);
 
     public static void ddns() {
         ReadPropertiesToUser readPo = ReadPropertiesToUser.getReadPo();
         UserInfo userInfo = readPo.getUserInfo();
         System.out.println(userInfo);
         if (userInfo.getZone_id().equals("")) {
-            DDNSlogger.error("zone_id为空,请检查配置文件");
+            DDNSLogger.error("zone_id为空,请检查配置文件");
             return;
         }
         if (userInfo.getRecord_id().equals("")) {
-            DDNSlogger.error("record_id为空,请检查配置文件");
+            DDNSLogger.error("record_id为空,请检查配置文件");
             return;
         }
         if (userInfo.getName().equals("")) {
-            DDNSlogger.error("域名为空,请检查配置文件");
+            DDNSLogger.error("域名为空,请检查配置文件");
             return;
         }
         if (userInfo.getKey().equals("")) {
-            DDNSlogger.error("key为空,请检查配置文件");
+            DDNSLogger.error("key为空,请检查配置文件");
             return;
         }
         if (userInfo.getType().equals("")) {
-            DDNSlogger.error("type为空,请检查配置文件");
+            DDNSLogger.error("type为空,请检查配置文件");
             return;
         }
         if (userInfo.getEmail().equals("")) {
-            DDNSlogger.error("email为空,请检查配置文件");
+            DDNSLogger.error("email为空,请检查配置文件");
             return;
         }
         String apiUrl = DDNSUtils.getApiUrl(userInfo.getZone_id(), userInfo.getRecord_id());
+        String ip;
         if (userInfo.isSelect()) {
             if (userInfo.getType().equals("A")) {
                 ip = DDNSUtils.getLocalIPv4();
@@ -56,12 +56,14 @@ public class DDNS {
             ip = DDNSUtils.getIP(userInfo.getObjectHost());
         }
         String ip2 = DDNSUtils.getIP(userInfo.getName());
-        if (ip.equals(ip2)) {
-            DDNSlogger.info("IP地址一致，无需更新");
-            return;
+        if (!userInfo.isForce()) {
+            if (ip.equals(ip2)) {
+                DDNSLogger.info("IP地址一致，无需更新");
+                return;
+            }
         }
         if (ip2.equals("0.0.0.0")) {
-            DDNSlogger.error("获取IP地址失败,请检查网络连接,或者检查域名是否正确");
+            DDNSLogger.error("获取IP地址失败,请检查网络连接,或者检查域名是否正确");
             return;
         }
 
@@ -85,16 +87,16 @@ public class DDNS {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 responseBody = in.lines().collect(Collectors.joining());
             }
-            DDNSlogger.info("更新结果：" + responseBody);
+            DDNSLogger.info("更新结果：" + responseBody);
             if (responseCode == 200) {
-                DDNSlogger.info("更新成功");
+                DDNSLogger.info("更新成功");
             } else {
-                DDNSlogger.error("更新失败");
+                DDNSLogger.error("更新失败");
             }
             List<String> contentTypes = connection.getHeaderFields().get("Content-Type");
-            DDNSlogger.info("Content-Type response header value: " + contentTypes.get(0));
+            DDNSLogger.info("Content-Type response header value: " + contentTypes.get(0));
         } catch (IOException e) {
-            DDNSlogger.error("IO异常" + e.getMessage());
+            DDNSLogger.error("IO异常" + e.getMessage());
         }
     }
 }

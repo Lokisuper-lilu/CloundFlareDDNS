@@ -61,6 +61,8 @@ public class DDNS {
                 DDNSLogger.info("IP地址一致，无需更新");
                 return;
             }
+        } else {
+            DDNSLogger.info("用户开启了强制更新");
         }
         if (ip2.equals("0.0.0.0")) {
             DDNSLogger.error("获取IP地址失败,请检查网络连接,或者检查域名是否正确");

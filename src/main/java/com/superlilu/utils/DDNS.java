@@ -55,19 +55,20 @@ public class DDNS {
         } else {
             ip = DDNSUtils.getIP(userInfo.getObjectHost());
         }
-        String ip2 = DDNSUtils.getIP(userInfo.getName());
         if (!userInfo.isForce()) {
+             String ip2 = DDNSUtils.getIP(userInfo.getName());
             if (ip.equals(ip2)) {
                 DDNSLogger.info("IP地址一致，无需更新");
                 return;
             }
+            if (ip2.equals("0.0.0.0")) {
+            DDNSLogger.error("获取IP地址失败,请检查网络连接,或者检查域名是否正确");
+            return;
+            }
         } else {
             DDNSLogger.info("用户开启了强制更新");
         }
-        if (ip2.equals("0.0.0.0")) {
-            DDNSLogger.error("获取IP地址失败,请检查网络连接,或者检查域名是否正确");
-            return;
-        }
+        
 
         String jsonBody = String.format("{\"type\":\"%s\",\"name\":\"%s\",\"content\":\"%s\",\"ttl\":%d,\"proxied\":false}"
                 , userInfo.getType(), userInfo.getName(), ip, userInfo.getTtl());

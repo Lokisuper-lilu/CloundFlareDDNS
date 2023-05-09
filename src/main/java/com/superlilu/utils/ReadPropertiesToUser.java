@@ -56,7 +56,7 @@ public class ReadPropertiesToUser {
                 logger.debug("ttl为空,设置ttl为120");
             }
             if (properties.getProperty("select") != null) {
-                logger.debug("select不为空,设置select为" + properties.getProperty("select"));
+                logger.debug("select不为空,select为" + properties.getProperty("select"));
                 userInfo.setSelect(Boolean.parseBoolean(properties.getProperty("select")));
                 if (!userInfo.isSelect()) {
                     logger.debug("select为False,设置为对目标域名ddns");

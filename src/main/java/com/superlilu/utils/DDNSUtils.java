@@ -36,6 +36,7 @@ public class DDNSUtils {
         String localIpv4 = null;
         try {
             localIpv4 = Jsoup.connect(url).ignoreContentType(true).execute().body();
+            localIpv4.replaceAll("\n", "");
         } catch (Exception e) {
             logger.error("获取本机IPv4地址失败,可能是网络问题");
             logger.error("错误信息为" + e.getMessage());
@@ -54,8 +55,9 @@ public class DDNSUtils {
         } catch (Exception e) {
             logger.error("获取本机IPv6地址失败,可能是网络问题,或者本机没有IPv6地址");
             logger.error("错误信息为" + e.getMessage());
-            e.printStackTrace();
+            System.exit(0);
         }
+        localIPv6 = localIPv6.replaceAll("\n", "");
         logger.info("本机IPv6地址为：" + localIPv6);
         return localIPv6;
     }//用Jsoup访问https://ipv6.icanhazip.com/获取本机IPv6地址
